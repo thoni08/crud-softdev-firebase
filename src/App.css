@@ -1,42 +1,230 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+.App {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  align-items: center;
+  justify-content: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
+.board {
+  width: 500px;
+  height: 650px;
+  border-radius: 40px;
+  box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.6);
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+  .content {
+    height: inherit;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    padding-inline: 2rem;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+.search-bar {
+  display: flex;
+  width: 100%;
+  padding-bottom: 1rem;
+
+  input {
+    width: inherit;
+    height: 2rem;
+    border-radius: 8px;
+    padding-inline: 8px;
   }
 }
 
-.card {
-  padding: 2em;
+.add-user {
+  padding-bottom: 1rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  button {
+    width: max-content;
+    height: 38px;
+    display: flex;
+    align-items: center;
+  }
+
+  .user-info {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: end;
+    padding: 0;
+
+    .user-content {
+      margin: 1rem;
+      input {
+        border: 0;
+        background-color: transparent;
+      }
+  
+      .user-contact {
+        input {
+          height: 19px;
+        }
+      }
+    }
+  }
+
+  .user-header {
+    height: 36px;
+    
+    input {
+      font-weight: bold;
+      font-size: 24px;
+    }
+  }
 }
 
-.read-the-docs {
-  color: #888;
+.user-list-area {
+  display: flex;
+  width: 100%;
+  overflow-y: auto;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: row;
+  align-items: end;
+  border-radius: 8px;
+  padding: 1rem;
+
+  h1, h2, h3, p {
+    margin: 0;
+    padding: 0;
+  }
+
+  .user-content {
+    width: 100%;
+  }
+
+  .user-header {
+    display: flex;
+    gap: 6px;
+
+    .user-name {
+      text-box-trim: trim-both;
+    }
+  }
+  
+  .user-contact > div {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 4px;
+    padding-block: 2px;
+
+    span {
+      font-size: 14px;
+    }
+  }
+}
+
+.updating {
+  input {
+    border: 0;
+    background-color: transparent;
+  }
+
+  .user-contact {
+    input {
+      height: 19px;
+    }
+  }
+
+  .user-header {
+    height: 36px;
+    
+    input {
+      font-weight: bold;
+      font-size: 24px;
+    }
+  }
+
+  .submit-user-btn {
+    padding: 0;
+    > button {
+      height: 30px;
+    }
+  }
+}
+
+.submit-user-btn {
+  padding-bottom: 1rem;
+  padding-right: 1rem;
+}
+
+.submit-user-btn, .user-btn {
+  width: min-content;
+  margin: 0;
+
+  > button {
+    width: min-content;
+    height: min-content;
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .board {
+    background-color: rgb(45, 45, 45);
+
+    h1, h2, h3, p {
+      color: #ffffff;
+      text-shadow: 0px 0px 20px rgba(255, 255, 255, 0.4);
+    }
+  }
+  .user-info, .add-user > button {
+    background: #ffffff;
+    background: linear-gradient(135deg, #ffffff, #e3e3e3);
+
+    h1, h2, h3, p, span {
+      color: transparent;
+      background: linear-gradient(135deg, #434343, #000000);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    svg {
+      color: #434343;
+    }
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .board {
+    background-color: rgb(255, 255, 255);
+
+    h1, h2, h3, p {
+      color: #3d3d3d;
+    }
+  }
+  .user-info, .add-user > button {
+    background: #000000;
+    background: linear-gradient(135deg, #000000, #434343);
+
+    h1, h2, h3, p, span {
+      color: transparent;
+      background: linear-gradient(135deg, #dcdcdc, #ffffff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    svg {
+      color: #eeeeee;
+    }
+  }
 }
