@@ -1,95 +1,52 @@
 import { useState, useEffect } from 'react'
-import { db } from './firebase'
-import { addDoc, collection, onSnapshot, orderBy, query, doc, updateDoc, deleteDoc } from 'firebase/firestore'
 import './App.css'
+import Board from './components/Board'
+import SearchBar from './components/SearchBar'
+import UserInfo from './components/UserInfo'
+import AddUser from './components/AddUser'
+import { Read } from './crud'
 
-type Todo = {
-  id: string
-  text: string
-  completed: boolean
-  timestamp: any
+export type User = {
+  id: string,
+  name: string,
+  username: string,
+  email: string,
+  phone: string
 }
 
 function App() {
-  const [ todos, setTodos ] = useState<Todo[]>([])
-  const [ input, setInput ] = useState('')
+  const [ userData, setUserData ] = useState<User[]>([])
+  const [ searchQuery, setSearchQuery ] = useState<string>("")
 
-  // create todo
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    if (input === '') {
-      alert('Todo tidak boleh kosong!');
-      return;
-    }
-
-    try {
-      await addDoc(collection(db, 'todos'), {
-        text: input,
-        completed: false,
-        timestamp: new Date()
-      })
-    } catch (error) {
-      console.error("Error adding todo:", error)
-    }
-  }
-
-  // read todos
   useEffect(() => {
-    const q = query(collection(db, 'todos'), orderBy('timestamp', 'desc'))
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      let todosArray: Todo[] = []
-      snapshot.forEach((doc) => {
-        todosArray.push({ id: doc.id, ...(doc.data() as Omit<Todo, 'id'>) })
-      })
-      setTodos(todosArray)
+    const unsubscribe = Read((users) => {
+      setUserData(users)
     })
     return () => unsubscribe()
   }, [])
 
-  // update todo
-  const handleToggleComplete = async (id: string) => {
-    try {
-      const todoRef = doc(db, 'todos', id)
-      await updateDoc(todoRef, {
-        completed: !todos.find(todo => todo.id === id)?.completed
-      })
-    } catch (error) {
-      console.error("Error updating todo:", error)
-    }
-  }
-
-  // delete todo
-  const handleDeleteTodo = async (id: string) => {
-    try {
-      const todoRef = doc(db, 'todos', id)
-      await deleteDoc(todoRef)
-    } catch (error) {
-      console.error("Error deleting todo:", error)
-    }
-  }
+  const queriedUsers = userData.filter((user: any) => {
+    const q = searchQuery.toLowerCase()
+    return user.name.toLowerCase().includes(q) || user.username.toLowerCase().includes(q)
+  })
 
   return (
-    <>
-      <h1>Todo List</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        />
-        <button type="submit">Add Todo</button>
-      </form>
-      <ul>
-        {todos.map((todo) => (
-          <li key={todo.id}>
-            <span onClick={() => handleToggleComplete(todo.id)}>
-              {todo.text}
-            </span>
-            <button onClick={() => handleDeleteTodo(todo.id)}>Delete</button>
-          </li>
-        ))}
-      </ul>
-    </>
+    <div className="App">
+      <Board>
+        <h1>User List</h1>
+        <SearchBar setSearchQuery={setSearchQuery} />
+        <AddUser />
+        <div className="user-list-area">
+          { queriedUsers.length === 0 ? (
+            <h2>Tidak ada user</h2>
+          ) : (
+            queriedUsers.map((user: User) => (
+              <UserInfo key={user.id} user={user} />
+            ))
+          )}
+        </div>
+      </Board>
+    </div>
   )
 }
 
